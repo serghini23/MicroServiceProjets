@@ -1,7 +1,10 @@
 package net.serghini.tpprojet.services;
 
+import feign.FeignException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import net.serghini.tpprojet.client.ChercheurClient;
+import net.serghini.tpprojet.client.EnseignantClient;
 import net.serghini.tpprojet.dtos.RequestProjetDto;
 import net.serghini.tpprojet.dtos.ResponseAllProjetDto;
 import net.serghini.tpprojet.dtos.ResponseProjetDto;
@@ -18,8 +21,17 @@ import java.util.List;
 public class ProjetServicesImpl implements ProjetServices {
     private ProjetRepository  projetRepository;
     private ProjetMapper projetMapper;
+    private ChercheurClient chercheurClient;
+    private EnseignantClient enseignantClient;
+
     @Override
     public ResponseProjetDto addProjet(RequestProjetDto requestProjetDto) {
+        try {
+            chercheurClient.getChercheurById(requestProjetDto.getIdChercheur());
+            enseignantClient.getEnseignantById(requestProjetDto.getIdEnseignant());
+        } catch (FeignException.NotFound nf) {
+            throw new IllegalArgumentException("Le chercheur ou l'enseignant  n'existe pas pour l'id fourni");
+        }
         Projet projet = projetMapper.dto_to_entity(requestProjetDto);
         Projet saved = projetRepository.save(projet);
         return projetMapper.entity_to_dto(saved);
@@ -61,4 +73,19 @@ public class ProjetServicesImpl implements ProjetServices {
         projetRepository.deleteById(id);
 
     }
+
+
+
+    @Override
+    public long countByIdEnseignant(Long idEnseignant) {
+        return projetRepository.countByIdEnseignant(idEnseignant);
+    }
+
+    @Override
+    public long countByIdChercheur(Long idChercheur) {
+        return projetRepository.countByIdChercheur(idChercheur);
+    }
+
+
+
 }

@@ -19,4 +19,6 @@ public class Projet {
     private Long id ;
     private String titre ;
     private String  description;
+    private Long idChercheur;
+    private Long idEnseignant;
 }

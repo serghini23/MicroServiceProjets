@@ -12,4 +12,7 @@ public interface ProjetServices {
     public List<ResponseAllProjetDto> getALLEnseignants();
     public ResponseProjetDto updateProjet(Long id, RequestProjetDto  requestProjetDto);
     public void deleteProjet(Long id);
+    long countByIdEnseignant(Long idEnseignant);
+    long countByIdChercheur(Long idChercheur);
+
 }

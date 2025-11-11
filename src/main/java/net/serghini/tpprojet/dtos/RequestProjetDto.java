@@ -12,4 +12,6 @@ import lombok.Setter;
 public class RequestProjetDto {
     private String titre ;
     private String  description;
+    private Long idChercheur;
+    private Long idEnseignant;
 }

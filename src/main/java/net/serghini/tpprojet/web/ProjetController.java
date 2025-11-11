@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/projets")
@@ -41,6 +42,14 @@ public class ProjetController {
         return ResponseEntity.ok().build();
     }
 
-
-
+    @GetMapping("/chercheur/{idChercheur}/count")
+    public ResponseEntity<Map<String, Object>> countByChercheur(@PathVariable Long idChercheur) {
+        long count = projetServices.countByIdChercheur(idChercheur);
+        return ResponseEntity.ok(Map.of("message", "Nombre de projets du chercheur", "count", count));
+    }
+    @GetMapping("/enseignant/{idEnseignant}/count")
+    public ResponseEntity<Map<String, Object>> countByEnseignant(@PathVariable Long idEnseignant) {
+        long count = projetServices.countByIdEnseignant(idEnseignant);
+        return ResponseEntity.ok(Map.of("message", "Nombre de projets de l'enseignant", "count", count));
+    }
 }
